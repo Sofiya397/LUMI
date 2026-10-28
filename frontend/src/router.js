@@ -2,12 +2,15 @@
 // Нова сторінка = новий рядок у ROUTES.
 import { renderWelcome } from './pages/welcome.js';
 import { renderRegister } from './pages/register.js';
+import { renderLogin } from './pages/login.js';
+import { renderHome } from './pages/home.js';
 import { renderPlaceholder } from './pages/placeholder.js';
 
 const ROUTES = {
   welcome: (root) => renderWelcome(root),
   register: (root) => renderRegister(root),
-  login: (root) => renderPlaceholder(root, 'Вхід', '#26'),
+  login: (root) => renderLogin(root),
+  home: (root) => renderHome(root),
   quiz: (root) => renderPlaceholder(root, 'Тест шкіри', 'Quiz page #2'),
 };
 
