@@ -1,63 +1,51 @@
-// Стартова сторінка (issues #1, #15): дві кнопки — "Розпочати безкоштовно" і "Увійти в акаунт"
+// Стартова сторінка (issues #1, #15): дві кнопки — "Розпочати безкоштовно" і "Увійти в акаунт".
+// На ноутбуці — дві колонки (текст ліворуч, ілюстрація праворуч), на телефоні — одна колонка по центру.
+
+const ICONS = {
+  flask:
+    '<path d="M9 3h6M10 3v6l-5.5 9.2A2 2 0 0 0 6.2 21h11.6a2 2 0 0 0 1.7-2.8L14 9V3M7.5 15h9"/>',
+  drop: '<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+};
+
+function icon(name) {
+  return `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+}
 
 export function renderWelcome(root) {
   root.innerHTML = `
-    <main class="page welcome">
-      <header class="welcome-bar">
+    <div class="welcome">
+      <header class="welcome-bar page-x">
         <a class="logo-link" href="#welcome"><img src="/logo.svg" width="34" height="34" alt="" /><b>LUMI</b></a>
-        <a class="btn btn-ghost btn-sm" href="#login">Увійти</a>
       </header>
 
-      <section class="welcome-hero">
-        <div class="welcome-text">
+      <main class="welcome-main page-x">
+        <section class="welcome-text">
           <p class="eyebrow">Твій персональний ШІ-дерматолог</p>
-          <h1 class="display">Вітаємо <em>у LUMI</em></h1>
+          <h1 class="display">Вітаємо <em>у&nbsp;LUMI</em></h1>
           <p class="welcome-lead muted">
-            Пройди короткий тест шкіри, перевір склад будь-якого засобу
-            і отримай рутину догляду, створену саме для тебе.
+            Пройди короткий тест шкіри, перевір склад засобів
+            і отримай догляд, створений саме для тебе.
           </p>
 
           <div class="welcome-actions">
             <a class="btn btn-primary" href="#register" id="start-btn">Розпочати безкоштовно</a>
             <a class="btn btn-ghost" href="#login" id="login-btn">Увійти в акаунт</a>
           </div>
+        </section>
 
-          <ul class="welcome-facts">
-            <li><b>12 000+</b><span>перевірених компонентів</span></li>
-            <li><b>5 питань</b><span>до твоєї рутини</span></li>
-            <li><b>0 грн</b><span>базові функції</span></li>
-          </ul>
+        <div class="welcome-art" aria-hidden="true">
+          <div class="orb">
+            <div class="orb-ring"></div>
+            <div class="orb-core glass"><img src="/logo.svg" alt="" /></div>
+          </div>
+          <span class="chip glass chip-1">${icon('flask')}Аналіз складу</span>
+          <span class="chip glass chip-2">${icon('drop')}Рутина догляду</span>
+          <span class="chip glass chip-3">${icon('sun')}Захист від сонця</span>
         </div>
+      </main>
 
-        <div class="welcome-preview" aria-hidden="true">
-          <div class="glass preview-card preview-scan">
-            <div class="score">87</div>
-            <div>
-              <p class="eyebrow">Аналіз складу</p>
-              <b>Niacinamide 10% + Zinc 1%</b>
-              <div class="tags"><span class="tag ok">Безпечно</span><span class="tag">Для жирної шкіри</span></div>
-            </div>
-          </div>
-
-          <div class="glass preview-card preview-routine">
-            <p class="eyebrow">Ранкова рутина</p>
-            <ol>
-              <li class="done">Гель для вмивання</li>
-              <li class="done">Сироватка з ніацинамідом</li>
-              <li>Крем SPF 50</li>
-            </ol>
-          </div>
-
-          <div class="glass preview-card preview-streak">
-            <b class="display">14</b>
-            <span class="muted small">днів догляду поспіль</span>
-          </div>
-        </div>
-      </section>
-
-      <footer class="welcome-foot small muted">
-        LUMI не замінює консультацію дерматолога · Твої дані захищені відповідно до Закону України «Про захист персональних даних»
-      </footer>
-    </main>
+            <footer class="welcome-foot page-x small muted">Поради LUMI мають довідковий характер і не замінюють консультацію дерматолога</footer>
+    </div>
   `;
 }
