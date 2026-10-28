@@ -84,6 +84,22 @@ def register_user(user: UserCreate):
     finally:
         conn.close()
 
+@app.delete("/users/{user_id}")
+def delete_user(user_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
+        conn.commit()
+
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Користувача не знайдено")
+
+        return {"message": "Користувача видалено", "user_id": user_id}
+
+    finally:
+        conn.close()
 
 if __name__ == '__main__':
     import uvicorn
