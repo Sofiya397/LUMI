@@ -22,7 +22,7 @@ app.add_middleware(
 init_db()
 
 
-# Тексти помилок для полів реєстрації (вимоги з задачі #16)
+# Тексти помилок для полів реєстрації
 REGISTER_FIELD_ERRORS = {
     "username": "Введи своє ім'я",
     "email": "Введи коректний email",
@@ -40,7 +40,6 @@ class UserCreate(BaseModel):
     @field_validator("password")
     @classmethod
     def password_fits_bcrypt(cls, value: str) -> str:
-        # bcrypt працює максимум з 72 байтами
         if len(value.encode("utf-8")) > 72:
             raise ValueError("Пароль занадто довгий")
         return value
@@ -48,7 +47,6 @@ class UserCreate(BaseModel):
 
 @app.exception_handler(RequestValidationError)
 async def validation_error_handler(request: Request, exc: RequestValidationError):
-    """Повертає 422 з українськими текстами помилок для кожного поля."""
     errors = {}
     for error in exc.errors():
         field = str(error["loc"][-1])
