@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from database import get_connection, init_db
-from security import hash_password
+from security import hash_password, verify_password
 
 app = FastAPI(title="LUMI API", description="Backend для платформи догляду за шкірою LUMI")
 
@@ -43,6 +43,10 @@ class UserCreate(BaseModel):
         if len(value.encode("utf-8")) > 72:
             raise ValueError("Пароль занадто довгий")
         return value
+  
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
 
 
 @app.exception_handler(RequestValidationError)
@@ -84,6 +88,28 @@ def register_user(user: UserCreate):
     finally:
         conn.close()
 
+@app.post("/login")
+def login_user(data: UserLogin):
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "SELECT id, username, password_hash, role FROM users WHERE email = ?",
+            (data.email.lower(),),
+        )
+        row = cursor.fetchone()
+
+        if row is None or not verify_password(data.password, row[2]):
+            raise HTTPException(status_code=401, detail="Неправильний логін або пароль")
+
+        return {
+            "message": "Користувача знайдено",
+            "user_id": row[0],
+            "username": row[1],
+            "role": row[3],
+        }
+    finally:
+        conn.close()
 
 if __name__ == '__main__':
     import uvicorn
