@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from database import get_connection, init_db
 from security import hash_password, verify_password
+from oauth_mock import router as oauth_router
 
 app = FastAPI(title="LUMI API", description="Backend для платформи догляду за шкірою LUMI")
 
@@ -20,7 +21,7 @@ app.add_middleware(
 )
 
 init_db()
-
+app.include_router(oauth_router)
 
 # Тексти помилок для полів реєстрації
 REGISTER_FIELD_ERRORS = {
