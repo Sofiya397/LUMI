@@ -1,229 +1,210 @@
-/* Стартова сторінка "Вітаємо у LUMI" */
+/* Стартова сторінка "Вітаємо у LUMI"
+   Ноутбук: шапка + дві колонки (текст | ілюстрація) на всю ширину.
+   Телефон: одна колонка по центру, ілюстрація зверху. */
 
 .welcome {
+  overflow-x: clip;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+}
+
+.page-x {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
 }
 
 .welcome-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.btn-sm {
-  padding: 9px 16px;
-  font-size: 14px;
-  border-radius: 12px;
+  padding-block: 22px;
 }
 
 .eyebrow {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent);
 }
 
-.welcome-hero {
+/* ---------- основна частина ---------- */
+.welcome-main {
   flex: 1;
   display: grid;
-  gap: 40px;
+  grid-template-columns: 1fr;
   align-items: center;
-  padding-block: 36px;
-}
-@media (min-width: 900px) {
-  .welcome-hero {
-    grid-template-columns: 1.1fr 1fr;
-    padding-block: 48px;
-  }
+  align-content: center;
+  gap: 28px;
+  padding-block: 12px 32px;
 }
 
 .welcome-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   animation: rise 0.5s ease both;
 }
+
 .welcome-text h1 {
-  font-size: clamp(44px, 8vw, 76px);
-  line-height: 1;
-  margin-top: 14px;
+  font-size: clamp(42px, min(7vw, 10vh), 92px);
+  line-height: 0.98;
+  margin-top: 16px;
 }
+
 .welcome-lead {
-  font-size: 18px;
-  max-width: 32em;
-  margin-top: 18px;
+  font-size: clamp(16px, 1.6vw, 20px);
+  max-width: 28em;
+  margin-top: 20px;
 }
 
 .welcome-actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 12px;
-  margin-top: 30px;
-}
-@media (max-width: 520px) {
-  .welcome-actions .btn {
-    width: 100%;
-  }
-}
-
-.welcome-facts {
-  list-style: none;
-  padding: 0;
-  margin: 34px 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px 32px;
-}
-.welcome-facts b {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 26px;
-  font-weight: 600;
-  color: var(--plum);
-  font-variant-numeric: tabular-nums;
-}
-.welcome-facts span {
-  font-size: 13px;
-  color: var(--sub);
-}
-@media (max-width: 520px) {
-  .welcome-facts {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-  .welcome-facts b {
-    font-size: 21px;
-  }
-  .welcome-facts span {
-    font-size: 12px;
-    line-height: 1.3;
-    display: block;
-  }
-}
-
-/* ---------- скляні картки-прев'ю праворуч ---------- */
-.welcome-preview {
-  display: grid;
-  gap: 14px;
-  max-width: 460px;
   width: 100%;
-  justify-self: center;
+  max-width: 420px;
+  margin-top: 32px;
 }
-.preview-card {
-  padding: 18px 20px;
+.welcome-actions .btn {
+  min-height: 56px;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+/* ---------- ілюстрація: логотип у скляній кулі + три підписи ---------- */
+.welcome-art {
+  position: relative;
+  order: -1;
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  container-type: inline-size; /* підписи масштабуються разом з ілюстрацією */
+}
+
+.orb {
+  position: absolute;
+  inset: 12%;
+  display: grid;
+  place-items: center;
+  animation: float 7s ease-in-out infinite;
+}
+.orb-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--aura1), transparent 70%),
+    radial-gradient(circle at 70% 75%, var(--aura2), transparent 65%);
+  opacity: 0.9;
+  filter: blur(6px);
+}
+.orb-core {
+  position: relative;
+  width: 56%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.orb-core img {
+  width: 58%;
+  height: auto;
+  filter: drop-shadow(0 10px 22px rgba(194, 88, 128, 0.35));
+}
+
+.chip {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.7em 1.1em;
+  border-radius: 999px;
+  font-size: clamp(11px, 3.3cqi, 15px); /* розмір залежить від розміру ілюстрації */
+  font-weight: 800;
+  color: var(--plum);
+  white-space: nowrap;
   animation: float 6s ease-in-out infinite;
 }
-.preview-card b {
-  display: block;
-  margin-top: 2px;
+.chip svg {
+  width: 1.2em;
+  height: 1.2em;
+  color: var(--accent);
 }
-.preview-scan {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.chip-1 {
+  top: 6%;
+  left: -4%;
+  animation-delay: -1s;
 }
-.preview-routine {
-  margin-left: 12%;
-  animation-delay: -2s;
+.chip-2 {
+  /* посередині праворуч — відсунуто правіше, щоб не закривати логотип */
+  top: 46%;
+  right: -16%;
+  animation-delay: -3s;
 }
-.preview-streak {
-  width: 70%;
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  animation-delay: -4s;
+.chip-3 {
+  bottom: 4%;
+  left: 2%;
+  animation-delay: -5s;
 }
-.preview-streak b {
-  font-size: 40px;
-  margin: 0;
-}
+
 @keyframes float {
   50% {
     transform: translateY(-8px);
   }
 }
 
-.score {
-  width: 64px;
-  height: 64px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--ok);
-  background: var(--ok-soft);
-  border: 3px solid var(--ok);
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
-}
-.tag {
-  display: inline-flex;
-  border-radius: 999px;
-  padding: 3px 10px;
-  font-size: 12px;
-  font-weight: 700;
-  background: var(--soft);
-  color: var(--plum);
-}
-.tag.ok {
-  background: var(--ok-soft);
-  color: var(--ok);
-}
-
-.preview-routine ol {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-weight: 700;
-  font-size: 14px;
-}
-.preview-routine li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.preview-routine li::before {
-  content: '';
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 2px solid var(--accent2);
-  flex-shrink: 0;
-}
-.preview-routine li.done {
-  color: var(--hint);
-  text-decoration: line-through;
-}
-.preview-routine li.done::before {
-  background: var(--ok);
-  border-color: var(--ok);
-}
-
-/* на телефоні показуємо лише дві картки, щоб кнопки були ближче */
-@media (max-width: 899px) {
-  .preview-streak {
+/* телефон: лише куля, компактно */
+@media (max-width: 599px) {
+  .welcome-art {
+    max-width: 170px;
+  }
+  .orb {
+    inset: 0;
+  }
+  .chip {
     display: none;
   }
-  .preview-routine {
-    margin-left: 0;
+}
+
+/* ---------- ноутбук (від 720px): дві колонки ---------- */
+@media (min-width: 720px) {
+  .welcome-bar {
+    padding-block: 20px;
+  }
+  .welcome-main {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: 40px;
+    padding-block: 8px 24px;
+  }
+  .welcome-text {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .welcome-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: none;
+    width: auto;
+  }
+  .welcome-actions .btn {
+    padding-inline: 30px;
+  }
+  .welcome-art {
+    order: 0;
+    width: 82%;
+    max-width: min(500px, 60vh);
+    justify-self: start;
+    margin: 0 0 0 4%;
   }
 }
 
 .welcome-foot {
   text-align: center;
-  padding-top: 18px;
-  border-top: 1px solid var(--line);
+  padding-block: 16px 24px;
 }
