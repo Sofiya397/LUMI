@@ -18,7 +18,7 @@ from security import hash_password
 
 router = APIRouter(prefix="/auth", tags=["OAuth (імітація)"])
 
-SUPPORTED_PROVIDERS = ("google",)
+SUPPORTED_PROVIDERS = ("google", "apple")
 
 # Пара ключів для кожного провайдера: приватний «у Google», публічний «у нас».
 _KEYS = {}
