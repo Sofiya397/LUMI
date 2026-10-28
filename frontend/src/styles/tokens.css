@@ -1,0 +1,85 @@
+/* Дизайн-токени LUMI: усі кольори й шрифти беремо тільки звідси */
+:root {
+  --bg: #fbeff4;
+  --aura1: #ffc6dd;
+  --aura2: #e6d0f7;
+  --aura3: #ffe2cc;
+
+  --glass: rgba(255, 255, 255, 0.58);
+  --glass-strong: rgba(255, 255, 255, 0.82);
+  --glass-line: rgba(255, 255, 255, 0.85);
+
+  --fg: #4a1230;
+  --plum: #7a2d52;
+  --sub: #9b5c7c;
+  --hint: #c49ab2;
+  --line: #f2d3e2;
+
+  --accent: #c25880;
+  --accent2: #f28bad;
+  --soft: #ffe3ee;
+  --on-accent: #ffffff;
+
+  --ok: #1e7a4d;
+  --ok-soft: #e3f5eb;
+  --bad: #a42c3a;
+  --bad-soft: #ffe6e8;
+
+  --shadow: 0 10px 40px rgba(122, 45, 82, 0.12);
+  --radius: 24px;
+
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'Nunito', 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Темна тема: системна або примусова через data-theme="dark" */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #170b12;
+    --aura1: #5a1e3c;
+    --aura2: #3a2358;
+    --aura3: #4a2a1e;
+    --glass: rgba(48, 22, 36, 0.55);
+    --glass-strong: rgba(56, 26, 42, 0.85);
+    --glass-line: rgba(255, 190, 220, 0.14);
+    --fg: #ffe6f0;
+    --plum: #ffc4db;
+    --sub: #d79bb8;
+    --hint: #9a6a84;
+    --line: #4e2639;
+    --accent: #f28bad;
+    --accent2: #c25880;
+    --soft: #3d1a2c;
+    --on-accent: #2a0f1d;
+    --ok: #7fd8a8;
+    --ok-soft: #173527;
+    --bad: #ff8e9b;
+    --bad-soft: #41191f;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #170b12;
+  --aura1: #5a1e3c;
+  --aura2: #3a2358;
+  --aura3: #4a2a1e;
+  --glass: rgba(48, 22, 36, 0.55);
+  --glass-strong: rgba(56, 26, 42, 0.85);
+  --glass-line: rgba(255, 190, 220, 0.14);
+  --fg: #ffe6f0;
+  --plum: #ffc4db;
+  --sub: #d79bb8;
+  --hint: #9a6a84;
+  --line: #4e2639;
+  --accent: #f28bad;
+  --accent2: #c25880;
+  --soft: #3d1a2c;
+  --on-accent: #2a0f1d;
+  --ok: #7fd8a8;
+  --ok-soft: #173527;
+  --bad: #ff8e9b;
+  --bad-soft: #41191f;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}

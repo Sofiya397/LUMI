@@ -1,0 +1,206 @@
+/* Повторювані компоненти: скляна картка, кнопки, поля форми */
+
+.glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- кнопки ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 22px;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.2s, background 0.2s, opacity 0.2s;
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: var(--on-accent);
+  box-shadow: 0 8px 24px rgba(194, 88, 128, 0.3);
+}
+.btn-primary:hover:not(:disabled) {
+  box-shadow: 0 10px 30px rgba(194, 88, 128, 0.42);
+}
+.btn-ghost {
+  background: var(--glass-strong);
+  color: var(--plum);
+  border: 1px solid var(--line);
+}
+.btn-ghost:hover {
+  background: var(--soft);
+}
+.btn-block {
+  width: 100%;
+}
+
+/* спінер усередині кнопки під час запиту */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- поля форми ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sub);
+}
+.input {
+  width: 100%;
+  background: var(--glass-strong);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 13px 15px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input::placeholder {
+  color: var(--hint);
+}
+.input:focus {
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 4px rgba(242, 139, 173, 0.22);
+}
+.input[aria-invalid='true'] {
+  border-color: var(--bad);
+}
+
+.password-wrap {
+  position: relative;
+}
+.password-wrap .input {
+  padding-right: 92px;
+}
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  color: var(--sub);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+.password-toggle:hover {
+  background: var(--soft);
+}
+
+.field-error {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bad);
+}
+.field-error:empty {
+  display: none;
+}
+.hint {
+  font-size: 12px;
+  color: var(--sub);
+}
+
+.check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  color: var(--sub);
+  cursor: pointer;
+}
+.check input {
+  accent-color: var(--accent);
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* загальне повідомлення над кнопкою */
+.alert {
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--bad-soft);
+  color: var(--bad);
+}
+.alert.success {
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+
+/* ---------- логотип ---------- */
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--plum);
+}
+.logo-link b {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- тимчасова сторінка-заглушка ---------- */
+.placeholder {
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - 80px);
+}
+.placeholder-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.placeholder-card h1 {
+  font-size: clamp(30px, 6vw, 38px);
+}
+
+/* плавна поява блоків */
+@keyframes rise {
+  from {
+    opacity: 0.001;
+    transform: translateY(10px);
+  }
+}
