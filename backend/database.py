@@ -1,7 +1,6 @@
 import sqlite3
 from pathlib import Path
 
-# База лежить поруч із цим файлом, тому шлях не залежить від того, звідки запускають сервер
 DB_PATH = Path(__file__).resolve().parent / "skincode.db"
 
 
@@ -83,7 +82,7 @@ def init_db():
         )
     ''')
 
-    # 3. Каталог засобів (структура збігається з CSV у data/)
+    # 3. Каталог засобів 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS products (
             id INTEGER PRIMARY KEY AUTOINCREMENT,

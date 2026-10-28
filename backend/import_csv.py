@@ -16,7 +16,6 @@ def import_products_from_csv():
     if missing:
         raise ValueError(f"У CSV бракує колонок: {missing}")
 
-    # Засоби без назви не імпортуємо, порожні значення замінюємо на ''
     df = df.dropna(subset=["name"]).fillna("")
 
     products_data = [
@@ -29,7 +28,6 @@ def import_products_from_csv():
     conn = get_connection()
     cursor = conn.cursor()
 
-    # Повністю оновлюємо каталог, але структуру таблиці не чіпаємо
     cursor.execute("DELETE FROM products")
     cursor.executemany('''
         INSERT INTO products (name, brand, category, ingredients, country, effects)
