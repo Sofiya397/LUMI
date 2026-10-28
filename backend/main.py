@@ -111,6 +111,24 @@ def login_user(data: UserLogin):
     finally:
         conn.close()
 
+
+@app.delete("/users/{user_id}")
+def delete_user(user_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
+        conn.commit()
+
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Користувача не знайдено")
+
+        return {"message": "Користувача видалено", "user_id": user_id}
+    finally:
+        conn.close()
+
+
 if __name__ == '__main__':
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
