@@ -1,0 +1,119 @@
+/* Базові стилі сторінки: скидання, фон, типографіка */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+p,
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 2.5px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+/* М'які кольорові плями на фоні — дають ефект для скла */
+.aura {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.aura i {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.75;
+}
+.aura i:nth-child(1) {
+  width: 46vmax;
+  height: 46vmax;
+  background: var(--aura1);
+  top: -14vmax;
+  left: -10vmax;
+}
+.aura i:nth-child(2) {
+  width: 40vmax;
+  height: 40vmax;
+  background: var(--aura2);
+  bottom: -16vmax;
+  right: -8vmax;
+}
+.aura i:nth-child(3) {
+  width: 26vmax;
+  height: 26vmax;
+  background: var(--aura3);
+  top: 40%;
+  left: 45%;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--plum);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.display em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.muted {
+  color: var(--sub);
+}
+.small {
+  font-size: 13px;
+}
+
+/* Сторінка з бічними відступами, що враховують "чубчик" телефона */
+.page {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
