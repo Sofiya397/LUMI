@@ -1,9 +1,11 @@
-// Реєстрація з email (issue #20). Валідація і відповіді сервера — #16, згода на обробку даних — #1.
+// Реєстрація (issue #20). Валідація і відповіді сервера — #16, згода на обробку даних — #1.
+// Google / Apple — через імітацію OAuth на бекенді (#23, #25).
 // Ноутбук: ліворуч опис, праворуч форма. Телефон: заголовок і форма в одну колонку.
-import { registerUser, saveSession } from '../api/auth.js';
+import { registerUser, socialAuth, saveSession } from '../api/auth.js';
 import { validateRegister } from '../utils/validate.js';
 import { navigate } from '../router.js';
 import { authBar, icon, socialButtons, passwordField, bindAuthCommon, formHelpers } from '../components/auth-parts.js';
+import { askSocialAccount } from '../components/social-dialog.js';
 
 const FIELDS = ['username', 'email', 'password', 'consent'];
 
@@ -18,7 +20,7 @@ export function renderRegister(root) {
           <h1 class="display">Створи свій <em>профіль догляду</em></h1>
           <p class="auth-lead muted">Акаунт потрібен, щоб зберегти результати тесту і твою рутину.</p>
           <ul class="perks">
-            <li><span class="perk-ic">${icon('spark')}</span><span><b>Персональна рутина</b>коротке тесутвання для підбору догляду</span></li>
+            <li><span class="perk-ic">${icon('spark')}</span><span><b>Персональна рутина</b>за відповідями на 5 питань</span></li>
             <li><span class="perk-ic">${icon('flask')}</span><span><b>Перевірка складу</b>засобів, якими ти користуєшся</span></li>
             <li><span class="perk-ic">${icon('shield')}</span><span><b>Твої дані під захистом</b>обробляємо лише за твоєю згодою</span></li>
           </ul>
@@ -64,7 +66,7 @@ export function renderRegister(root) {
 
   const form = root.querySelector('#register-form');
   const ui = formHelpers(root, form);
-  bindAuthCommon(root, ui.showAlert);
+  bindAuthCommon(root, registerWithProvider);
 
   // прибираємо помилку поля, щойно користувач почав його виправляти
   FIELDS.forEach((name) => {
@@ -100,11 +102,9 @@ export function renderRegister(root) {
       navigate('quiz'); // 200 → сторінка тесту (#20)
     } catch (error) {
       if (error.status === 400) {
-        // "Користувач з таким email вже існує"
-        ui.setFieldError('email', error.message);
+        ui.setFieldError('email', error.message); // "Користувач з таким email вже існує"
         form.elements.email.focus();
       } else if (error.status === 422 && error.detail && typeof error.detail === 'object') {
-        // { detail: { поле: "текст помилки" } }
         Object.entries(error.detail).forEach(([name, message]) => {
           if (FIELDS.includes(name)) ui.setFieldError(name, message);
         });
@@ -115,4 +115,29 @@ export function renderRegister(root) {
       ui.setLoading(false);
     }
   });
+
+  // Реєстрація через Google / Apple. Згода на обробку даних обов'язкова і тут (#1).
+  async function registerWithProvider(provider) {
+    ui.hideAlert();
+    if (!form.elements.consent.checked) {
+      ui.setFieldError('consent', 'Щоб продовжити, дай згоду на обробку персональних даних');
+      form.elements.consent.focus();
+      return;
+    }
+
+    const account = await askSocialAccount(provider, { withName: true });
+    if (!account) return; // користувач закрив вікно
+
+    ui.setLoading(true, 'Створюємо акаунт…');
+    try {
+      const result = await socialAuth(provider, 'register', account);
+      saveSession({ id: result.user_id, username: account.name || account.email.split('@')[0], email: account.email });
+      navigate('quiz');
+    } catch (error) {
+      // 400 → "Користувач з таким email вже існує"
+      ui.showAlert(error.status === 400 ? `${error.message}. Спробуй увійти.` : error.message);
+    } finally {
+      ui.setLoading(false);
+    }
+  }
 }
