@@ -142,6 +142,29 @@ def init_db():
         )
     ''')
 
+
+    # 7. Відповіді на опитування (10 питань квізу)
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS quiz_answers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL UNIQUE,
+            answer_1 TEXT NOT NULL,
+            answer_2 TEXT NOT NULL,
+            answer_3 TEXT NOT NULL,
+            answer_4 TEXT NOT NULL,
+            answer_5 TEXT NOT NULL,
+            answer_6 TEXT NOT NULL,
+            answer_7 TEXT NOT NULL,
+            answer_8 TEXT NOT NULL,
+            answer_9 TEXT NOT NULL,
+            answer_10 TEXT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+    ''')
+
+
     conn.commit()
     conn.close()
 
