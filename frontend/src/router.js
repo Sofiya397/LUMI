@@ -4,6 +4,7 @@ import { renderWelcome } from './pages/welcome.js';
 import { renderRegister } from './pages/register.js';
 import { renderLogin } from './pages/login.js';
 import { renderHome } from './pages/home.js';
+import { renderQuiz } from './pages/quiz.js';
 import { renderPlaceholder } from './pages/placeholder.js';
 
 const ROUTES = {
@@ -11,7 +12,8 @@ const ROUTES = {
   register: (root) => renderRegister(root),
   login: (root) => renderLogin(root),
   home: (root) => renderHome(root),
-  quiz: (root) => renderPlaceholder(root, 'Тест шкіри', 'Quiz page #2'),
+  quiz: (root) => renderQuiz(root),
+  results: (root) => renderPlaceholder(root, 'Результати тесту', '#105'),
 };
 
 // при відкритті застосунку — стартова сторінка (#1)
