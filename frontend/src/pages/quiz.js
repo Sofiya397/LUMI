@@ -7,6 +7,7 @@ import { QUIZ_QUESTIONS } from '../data/quiz-questions.js';
 import { sendQuizAnswers } from '../api/quiz.js';
 import { getSession, saveSession } from '../api/auth.js';
 import { navigate } from '../router.js';
+import { saveLastAnswers } from '../data/skin-profile.js';
 
 const TOTAL = QUIZ_QUESTIONS.length;
 const LETTERS = 'АБВГДЕ';
@@ -210,7 +211,7 @@ export function renderQuiz(root) {
     try {
       await sendQuizAnswers(user.id, answers);
       saveSession({ ...user, quizDone: true });
-      sessionStorage.setItem('lumi_quiz_answers', JSON.stringify(answers)); // для сторінки результатів (#105)
+      saveLastAnswers(user.id, answers); // для сторінки результатів (#105)
       clearDraft(user.id);
       navigate('results');
     } catch (error) {
