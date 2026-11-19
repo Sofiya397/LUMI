@@ -1,0 +1,304 @@
+/* Сторінка тесту шкіри
+   Ноутбук (від 900px): ліворуч заголовок і список кроків, праворуч картка з питанням.
+   Телефон: заголовок, картка, кнопки внизу. */
+
+.quiz-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.quiz-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 18px;
+}
+.quiz-counter {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--sub);
+  font-variant-numeric: tabular-nums;
+}
+
+.quiz-main {
+  flex: 1;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 20px;
+  padding-block: 0 28px;
+}
+
+/* ---------- ліва частина ---------- */
+.quiz-aside {
+  text-align: center;
+  max-width: 460px;
+  animation: rise 0.5s ease both;
+}
+.quiz-aside h1 {
+  font-size: clamp(30px, 7vw, 50px);
+  line-height: 1.05;
+  margin-top: 10px;
+}
+.quiz-lead {
+  font-size: 16px;
+  margin-top: 14px;
+}
+
+.quiz-steps {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+}
+.quiz-steps button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  background: none;
+  border-radius: 12px;
+  color: var(--hint);
+  font-weight: 700;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+.quiz-steps button:disabled {
+  cursor: default;
+}
+.quiz-steps button:not(:disabled):hover {
+  background: var(--soft);
+}
+.quiz-steps .dot {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.quiz-steps li.done button {
+  color: var(--sub);
+}
+.quiz-steps li.done .dot {
+  background: var(--ok-soft);
+  border-color: transparent;
+  color: var(--ok);
+}
+.quiz-steps li.current button {
+  color: var(--plum);
+}
+.quiz-steps li.current .dot {
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  border-color: transparent;
+  color: var(--on-accent);
+}
+
+/* на телефоні й планшеті — без опису й списку кроків */
+@media (max-width: 899px) {
+  .quiz-lead,
+  .quiz-steps {
+    display: none;
+  }
+}
+
+/* ---------- картка з питанням ---------- */
+.quiz-card {
+  width: 100%;
+  max-width: 560px;
+  padding: 26px 28px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: rise 0.45s ease both;
+}
+
+.quiz-progress {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--soft);
+  overflow: hidden;
+}
+.quiz-progress i {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  transition: width 0.35s ease;
+}
+
+.quiz-num {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.quiz-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(22px, 3vw, 28px);
+  line-height: 1.2;
+  color: var(--plum);
+  margin-top: 6px;
+  text-wrap: balance;
+  outline: none;
+}
+
+.quiz-hint {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--soft);
+  color: var(--plum);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 16px;
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  background: var(--glass-strong);
+  color: var(--fg);
+  font-weight: 700;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+.quiz-option:hover {
+  border-color: var(--accent2);
+}
+.quiz-option:active {
+  transform: scale(0.99);
+}
+.quiz-option.selected {
+  border-color: var(--accent);
+  background: var(--soft);
+  color: var(--plum);
+}
+.quiz-letter {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--soft);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 800;
+}
+.quiz-option.selected .quiz-letter {
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: var(--on-accent);
+}
+/* для питань з кількома відповідями — квадратні галочки */
+.quiz-option[role='checkbox'] .quiz-letter {
+  border-radius: 9px;
+  border: 1.5px solid var(--accent2);
+  background: transparent;
+}
+.quiz-option[role='checkbox'].selected .quiz-letter {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+}
+
+.quiz-note {
+  margin-top: 8px;
+}
+
+.quiz-nav {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px;
+  margin-top: 4px;
+}
+.quiz-nav .btn {
+  min-height: 52px;
+}
+.quiz-nav .btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ---------- ноутбук: дві колонки ---------- */
+@media (min-width: 900px) {
+  .quiz-main {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
+    justify-content: space-between;
+    align-items: center;
+    column-gap: clamp(40px, 6vw, 96px);
+  }
+  .quiz-aside {
+    text-align: left;
+    justify-self: start;
+  }
+}
+
+/* невисокий екран ноутбука — компактніше, щоб усе влазило */
+@media (min-width: 900px) and (max-height: 800px) {
+  .quiz-bar {
+    padding-block: 10px;
+  }
+  .quiz-card {
+    padding-block: 20px 18px;
+    gap: 12px;
+  }
+  .quiz-option {
+    min-height: 48px;
+    padding-block: 9px;
+  }
+  .quiz-options {
+    gap: 8px;
+  }
+  .quiz-hint {
+    padding-block: 10px;
+  }
+}
+
+/* ---------- телефон ---------- */
+@media (max-width: 480px) {
+  .quiz-main {
+    align-content: start;
+    padding-block: 4px 20px;
+  }
+  .quiz-aside h1 {
+    font-size: 28px;
+  }
+  .quiz-card {
+    padding: 20px 18px 18px;
+    border-radius: 28px;
+  }
+  .quiz-option {
+    font-size: 14.5px;
+    padding: 11px 14px;
+    gap: 12px;
+  }
+}
