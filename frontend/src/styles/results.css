@@ -1,0 +1,306 @@
+/* Сторінка результатів тесту
+   Ноутбук: зверху картка профілю, під нею дві колонки (аналіз | догляд).
+   Телефон: усе в одну колонку. */
+
+.results-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.results-main {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-block: 4px 40px;
+}
+
+/* ---------- 1. профіль створено ---------- */
+.result-hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+  padding: 28px 30px;
+  animation: rise 0.45s ease both;
+}
+.result-badge {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: var(--on-accent);
+  box-shadow: 0 0 0 10px var(--soft);
+}
+.result-hero-text {
+  min-width: 0;
+}
+.result-hero h1 {
+  font-size: clamp(28px, 4.4vw, 46px);
+  line-height: 1.08;
+  margin-top: 8px;
+}
+.result-about {
+  font-size: 16px;
+  max-width: 62ch;
+  margin-top: 12px;
+}
+
+.result-tags {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--soft);
+  color: var(--plum);
+}
+.tag.ok {
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+.tag.warn {
+  background: #fff0dd;
+  color: #9a5b10;
+}
+.tag.lilac {
+  background: #efe3fa;
+  color: #6b45a0;
+}
+:root[data-theme='dark'] .tag.warn,
+:root[data-theme='dark'] .tag.lilac {
+  background: var(--soft);
+  color: var(--plum);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .tag.warn,
+  :root:not([data-theme='light']) .tag.lilac {
+    background: var(--soft);
+    color: var(--plum);
+  }
+}
+
+/* ---------- 2–3. картки секцій ---------- */
+.results-grid {
+  display: grid;
+  gap: 18px;
+}
+.result-card {
+  padding: 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  animation: rise 0.5s ease both;
+}
+.result-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.result-card-head h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 24px;
+  color: var(--plum);
+  flex: 1;
+}
+.result-card-ic {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--soft);
+  color: var(--accent);
+}
+.soon {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px dashed var(--accent2);
+  color: var(--accent);
+}
+
+/* місце під аналіз LUMI AI */
+.skeleton {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1.5px dashed var(--line);
+}
+.skeleton i {
+  display: block;
+  height: 10px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--soft), var(--glass-strong), var(--soft));
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+.skeleton i:nth-child(2) {
+  width: 86%;
+}
+.skeleton i:nth-child(3) {
+  width: 92%;
+}
+.skeleton i:nth-child(4) {
+  width: 60%;
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.tips {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  display: grid;
+  gap: 10px;
+}
+.tips li {
+  position: relative;
+  padding: 12px 14px 12px 40px;
+  border-radius: 14px;
+  background: var(--soft);
+  color: var(--plum);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.tips li::before {
+  content: '💡';
+  position: absolute;
+  left: 14px;
+  top: 11px;
+}
+
+/* персональний догляд */
+.care-cols {
+  display: grid;
+  gap: 18px;
+}
+.care-col h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 10px;
+}
+.care-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.care-steps li {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--glass-strong);
+  border: 1px solid var(--line);
+}
+.care-num {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: var(--on-accent);
+  font-size: 12px;
+  font-weight: 800;
+}
+.care-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 14px;
+}
+.care-body b {
+  color: var(--plum);
+}
+.product-slot {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  border: 1px dashed var(--line);
+  color: var(--hint);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.results-actions .btn {
+  min-height: 52px;
+}
+
+/* ---------- планшет і більше ---------- */
+@media (min-width: 640px) {
+  .care-cols {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ---------- ноутбук ---------- */
+@media (min-width: 1000px) {
+  .results-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+    align-items: start;
+  }
+}
+
+/* ---------- телефон ---------- */
+@media (max-width: 560px) {
+  .result-hero {
+    flex-direction: column;
+    gap: 16px;
+    padding: 22px 20px;
+  }
+  .result-badge {
+    width: 52px;
+    height: 52px;
+  }
+  .result-card {
+    padding: 20px 18px;
+  }
+  .results-actions .btn {
+    width: 100%;
+  }
+  .quiz-bar .back-link {
+    font-size: 13px;
+  }
+}

@@ -5,6 +5,7 @@ import './styles/components.css';
 import './styles/welcome.css';
 import './styles/auth.css';
 import './styles/quiz.css';
+import './styles/results.css';
 
 import { startRouter } from './router.js';
 
