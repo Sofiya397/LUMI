@@ -114,6 +114,24 @@ def login_user(data: UserLogin):
     finally:
         conn.close()
 
+@app.get("/users/{user_id}")
+def get_user(user_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("SELECT id, username, email FROM users WHERE id = ?", (user_id,))
+        row = cursor.fetchone()
+
+        if row is None:
+            raise HTTPException(status_code=404, detail="Користувача не знайдено")
+
+        return {"id": row[0], "username": row[1], "email": row[2]}
+
+    finally:
+        conn.close()
+
+
 
 @app.delete("/users/{user_id}")
 def delete_user(user_id: int):
