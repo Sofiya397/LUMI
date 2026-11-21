@@ -1,0 +1,224 @@
+/* Навігація застосунку
+   Телефон і планшет: нижня скляна панель, закріплена внизу екрана.
+   Ноутбук (від 1000px): бічне меню зліва, нижньої панелі немає. */
+
+.app-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+.app-main {
+  min-width: 0;
+  /* місце під нижню панель, щоб вона не закривала вміст */
+  padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+}
+
+/* ---------- нижня панель (телефон, планшет) ---------- */
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-around;
+  padding: 8px max(8px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px))
+    max(8px, env(safe-area-inset-left, 0px));
+  border-radius: 24px 24px 0 0;
+  border-bottom: none;
+}
+.bottom-nav a {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 0;
+  text-decoration: none;
+  color: var(--hint);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  border-radius: 14px;
+  -webkit-tap-highlight-color: transparent;
+}
+.bottom-nav a.on {
+  color: var(--accent);
+}
+.nav-pill {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 30px;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+.bottom-nav a.on .nav-pill {
+  background: var(--soft);
+}
+.bottom-nav a.on svg {
+  stroke-width: 2.2;
+}
+.bottom-nav a:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 2px;
+}
+
+/* на планшеті панель не розтягується на всю ширину */
+@media (min-width: 640px) {
+  .bottom-nav {
+    left: 50%;
+    right: auto;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    width: min(560px, calc(100vw - 32px));
+    padding: 8px;
+    border-radius: 24px;
+    border-bottom: 1px solid var(--glass-line);
+  }
+  .app-main {
+    padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ---------- бічне меню (ноутбук) ---------- */
+.side-nav {
+  display: none;
+}
+
+@media (min-width: 1000px) {
+  .app-shell {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 8px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+  }
+  .bottom-nav {
+    display: none;
+  }
+  .app-main {
+    padding-bottom: 0;
+  }
+
+  .side-nav {
+    position: sticky;
+    top: 16px;
+    height: calc(100vh - 32px);
+    height: calc(100dvh - 32px);
+    margin-block: 16px;
+    padding: 22px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+  .side-nav .logo-link {
+    padding-inline: 10px;
+  }
+  .side-links {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .side-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    text-decoration: none;
+    color: var(--sub);
+    font-weight: 700;
+    transition: background 0.2s, color 0.2s;
+  }
+  .side-link:hover {
+    background: var(--soft);
+    color: var(--plum);
+  }
+  .side-link.on {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: var(--on-accent);
+    box-shadow: 0 8px 20px rgba(194, 88, 128, 0.25);
+  }
+  .side-link:focus-visible {
+    outline: 2px solid var(--accent2);
+    outline-offset: 2px;
+  }
+
+  .side-user {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 16px;
+    background: var(--glass-strong);
+    border: 1px solid var(--line);
+  }
+  .side-user .avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 15px;
+  }
+  .side-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--plum);
+    font-size: 14px;
+  }
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--sub);
+    cursor: pointer;
+  }
+  .icon-btn:hover {
+    background: var(--soft);
+    color: var(--accent);
+  }
+
+  /* на ноутбуці лого й вихід уже є в бічному меню — у шапці сторінки їх ховаємо */
+  .app-main .home-bar .logo-link,
+  .app-main .home-bar .home-user {
+    display: none;
+  }
+  .app-main .home-bar {
+    padding-block: 12px 0;
+  }
+}
+
+/* ---------- сторінка «Скоро» всередині застосунку ---------- */
+.soon-page {
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - 140px);
+  min-height: calc(100dvh - 140px);
+  padding-block: 24px;
+}
+.soon-card {
+  width: 100%;
+  max-width: 480px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: rise 0.45s ease both;
+}
+.soon-card .widget-ic {
+  width: 52px;
+  height: 52px;
+}
+.soon-card h1 {
+  font-size: clamp(30px, 6vw, 40px);
+}
+.soon-card .soon {
+  align-self: flex-start;
+}

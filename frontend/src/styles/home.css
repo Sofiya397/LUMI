@@ -1,0 +1,229 @@
+/* Головна сторінка
+   Ноутбук: привітання, під ним сітка віджетів у 3 колонки (профіль шкіри — ширший).
+   Планшет: 2 колонки. Телефон: 1 колонка. */
+
+.home-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 18px;
+}
+.home-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: var(--on-accent);
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+}
+.btn-sm {
+  padding: 9px 14px;
+  font-size: 14px;
+  border-radius: 12px;
+}
+
+.home-main {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-block: 8px 40px;
+}
+
+/* ---------- привітання ---------- */
+.home-hello {
+  animation: rise 0.45s ease both;
+}
+.home-hello h1 {
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: 1.05;
+  margin-top: 8px;
+}
+.home-sub {
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+/* ---------- сітка віджетів ---------- */
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.widget {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  animation: rise 0.5s ease both;
+}
+.widget-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.widget-head h2 {
+  flex: 1;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 21px;
+  color: var(--plum);
+}
+.widget-ic {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--soft);
+  color: var(--accent);
+}
+
+/* профіль шкіри */
+.widget-profile {
+  background: linear-gradient(135deg, var(--glass), var(--soft));
+}
+.profile-type {
+  font-family: var(--font-display);
+  font-size: 26px;
+  color: var(--plum);
+}
+.profile-type em {
+  color: var(--accent);
+}
+.profile-about {
+  max-width: 60ch;
+}
+.day-tip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--glass-strong);
+  border: 1px solid var(--line);
+  color: var(--plum);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.day-tip b {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.widget-profile .btn {
+  align-self: flex-start;
+}
+.widget-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: auto;
+}
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 14px;
+  text-decoration: none;
+}
+.link-arrow:hover {
+  text-decoration: underline;
+}
+
+/* майбутні віджети */
+.widget-soon .widget-ic {
+  background: var(--glass-strong);
+  border: 1px solid var(--line);
+}
+.empty-rows {
+  display: grid;
+  gap: 8px;
+  margin-top: auto;
+}
+.empty-rows div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1.5px dashed var(--line);
+  color: var(--hint);
+  font-size: 13px;
+  font-weight: 700;
+}
+.empty-rows i {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--soft);
+}
+.empty-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 90px;
+  padding: 12px 14px 0;
+  margin-top: auto;
+  border-radius: 14px;
+  border: 1.5px dashed var(--line);
+}
+.empty-chart i {
+  flex: 1;
+  border-radius: 6px 6px 0 0;
+  background: var(--soft);
+}
+
+/* ---------- планшет: 2 колонки ---------- */
+@media (min-width: 640px) {
+  .home-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .widget-profile {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- ноутбук: 3 колонки ---------- */
+@media (min-width: 1000px) {
+  .home-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .widget-profile {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .widget-profile .profile-type {
+    font-size: 34px;
+  }
+}
+
+/* ---------- телефон ---------- */
+@media (max-width: 480px) {
+  .home-user .btn span {
+    display: none; /* лише іконка виходу */
+  }
+  .widget {
+    padding: 18px;
+  }
+}

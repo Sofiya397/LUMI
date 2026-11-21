@@ -6,6 +6,7 @@ import { renderLogin } from './pages/login.js';
 import { renderHome } from './pages/home.js';
 import { renderQuiz } from './pages/quiz.js';
 import { renderResults } from './pages/results.js';
+import { renderSoon } from './pages/soon.js';
 
 const ROUTES = {
   welcome: (root) => renderWelcome(root),
@@ -14,6 +15,12 @@ const ROUTES = {
   home: (root) => renderHome(root),
   quiz: (root) => renderQuiz(root),
   results: (root) => renderResults(root),
+  // розділи меню, які ще в роботі
+  scan: (root) => renderSoon(root, 'scan'),
+  feed: (root) => renderSoon(root, 'feed'),
+  progress: (root) => renderSoon(root, 'progress'),
+  profile: (root) => renderSoon(root, 'profile'),
+  privacy: (root) => renderSoon(root, 'privacy'),
 };
 
 // при відкритті застосунку — стартова сторінка (#1)
