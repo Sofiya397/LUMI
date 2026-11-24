@@ -164,7 +164,24 @@ def init_db():
         )
     ''')
 
-
+        # 8. Журнал аудиту 
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS audit_log (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            actor_id INTEGER,
+            action VARCHAR(50) NOT NULL
+                CHECK (action IN ('register', 'login', 'consent_granted', 'consent_revoked',
+                                  'quiz_saved', 'profile_shared', 'audit_viewed', 'user_deleted')),
+            dataset VARCHAR(50) NOT NULL
+                CHECK (dataset IN ('account', 'quiz_answers', 'skin_profile', 'consents', 'audit_log')),
+            consumer VARCHAR(50),
+            result VARCHAR(20) NOT NULL
+                CHECK (result IN ('success', 'denied', 'invalid', 'error')),
+            reason VARCHAR(255)
+        )
+    ''')
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_log (created_at)")
     conn.commit()
     conn.close()
 
