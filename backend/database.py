@@ -181,6 +181,8 @@ def init_db():
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         )
     ''')
+    
+
     conn.commit()
     conn.close()
 
