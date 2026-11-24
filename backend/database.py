@@ -165,6 +165,23 @@ def init_db():
     ''')
 
 
+        # 8. Згоди на обробку даних (задача 5.2, схема #128)
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS consents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            type VARCHAR(50) NOT NULL
+                CHECK (type IN ('data_processing', 'ai_profile_sharing')),
+            granted BOOLEAN NOT NULL CHECK (granted IN (0, 1)),
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+    ''')
+    cursor.execute('''
+        CREATE INDEX IF NOT EXISTS idx_consents_user_type
+            ON consents (user_id, type, created_at)
+    ''')
+
     conn.commit()
     conn.close()
 
