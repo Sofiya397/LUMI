@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import date, timedelta
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
@@ -134,6 +135,47 @@ def get_user(user_id: int):
         conn.close()
 
 
+@app.get("/users/{user_id}/streak")
+def get_streak(user_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("SELECT id FROM users WHERE id = ?", (user_id,))
+        if cursor.fetchone() is None:
+            raise HTTPException(status_code=404, detail="Користувача не знайдено")
+
+        # дні, коли користувач відмітив хоча б один крок догляду
+        cursor.execute('''
+            SELECT DISTINCT log_date FROM daily_logs
+            WHERE user_id = ? AND (
+                morning_cleanser = 1 OR morning_moisturizer = 1 OR morning_spf = 1 OR
+                evening_cleanser = 1 OR evening_moisturizer = 1
+            )
+            ORDER BY log_date DESC
+        ''', (user_id,))
+        days = [date.fromisoformat(row[0]) for row in cursor.fetchall()]
+    finally:
+        conn.close()
+
+    # серія рахується від сьогодні; якщо сьогодні ще немає відміток — від учора
+    streak = 0
+    if days:
+        current = date.today()
+        if days[0] < current:
+            current -= timedelta(days=1)
+        for day in days:
+            if day == current:
+                streak += 1
+                current -= timedelta(days=1)
+            elif day < current:
+                break
+
+    return {
+        "user_id": user_id,
+        "streak": streak,
+        "last_active_date": days[0].isoformat() if days else None,
+    }
 
 @app.delete("/users/{user_id}")
 def delete_user(user_id: int):
