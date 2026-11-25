@@ -1,11 +1,12 @@
 // Головна сторінка (#83, адаптивність — #89). Меню — components/app-nav.js.
 // Гість (#120) теж бачить головну, а замість профілю — заклик зареєструватися.
+// Серія днів догляду (#94) — той самий GET /users/{id}/streak, що й у профілі (#126).
 // 1. Звертання на ім'я, введене при реєстрації (бекенд #100, поки — з сесії).
 // 2. Поточна дата.
 // 3. Профіль шкіри з результатів тесту.
 // 4. Віджети, які ще не реалізовані, — порожні, але вже оформлені під майбутні дані.
 import { getSession } from '../api/auth.js';
-import { getUserName } from '../api/user.js';
+import { getUserName, getStreak } from '../api/user.js';
 import { loadLastAnswers, buildProfile } from '../data/skin-profile.js';
 import { appShell, bindAppShell } from '../components/app-nav.js';
 
@@ -18,6 +19,7 @@ const ICONS = {
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
   logout: '<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/>',
   arrow: '<path d="m9 6 6 6-6 6"/>',
+  fire: '<path d="M12 21c4 0 7-2.8 7-6.8 0-3.2-2-5.7-3.6-7.2.1 1.9-.9 3.4-2.3 3.4C13 7.6 11.5 5 9 3c.3 3-3 5.4-3 10.2C6 18.2 8.6 21 12 21z"/>',
 };
 const icon = (name, size = 20) =>
   `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -78,6 +80,54 @@ function soonWidget(w) {
       <p class="muted small">${w.text}</p>
       ${inner}
     </section>`;
+}
+
+// Серія днів догляду (#94). Поки дані вантажаться — скелетон.
+function streakCard() {
+  return `
+    <a class="glass streak-card" href="#profile" id="streak" aria-live="polite">
+      <span class="streak-fire">${icon('fire', 26)}</span>
+      <span class="streak-text">
+        <b class="streak-num"><i class="streak-skeleton"></i></b>
+        <span class="streak-sub muted small">Серія догляду</span>
+      </span>
+    </a>`;
+}
+
+function dayWord(n) {
+  const a = n % 10;
+  const b = n % 100;
+  if (a === 1 && b !== 11) return 'день';
+  if (a >= 2 && a <= 4 && (b < 12 || b > 14)) return 'дні';
+  return 'днів';
+}
+
+function todayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+async function loadStreak(root, userId) {
+  const card = root.querySelector('#streak');
+  if (!card) return;
+  const num = card.querySelector('.streak-num');
+  const sub = card.querySelector('.streak-sub');
+  try {
+    const data = await getStreak(userId);
+    const n = Number(data?.streak) || 0;
+    const doneToday = data?.last_active_date === todayISO();
+    if (n > 0) {
+      card.classList.add('on');
+      num.textContent = `${n} ${dayWord(n)} поспіль`;
+      sub.textContent = doneToday ? 'Сьогодні догляд уже відмічено ✓' : 'Відміть догляд сьогодні, щоб не перервати серію';
+    } else {
+      num.textContent = 'Почни серію';
+      sub.textContent = 'Відміть перший крок догляду сьогодні';
+    }
+  } catch {
+    num.textContent = 'Серія догляду';
+    sub.textContent = 'Не вдалося завантажити — перевір, чи запущено бекенд';
+  }
 }
 
 function formatToday() {
@@ -154,9 +204,12 @@ export function renderHome(root) {
 
       <main class="home-main page-x">
         <section class="home-hello">
-          <p class="eyebrow" id="today">${formatToday()}</p>
-          <h1 class="display">${guest ? 'Привіт!' : `Привіт, <em id="user-name">${esc(user.username || '')}</em>`}</h1>
-          <p class="muted home-sub">${guest ? 'Знайомся з LUMI — усі особисті функції відкриються після реєстрації' : 'Гарного дня для твоєї шкіри 🌸'}</p>
+          <div class="home-hello-text">
+            <p class="eyebrow" id="today">${formatToday()}</p>
+            <h1 class="display">${guest ? 'Привіт!' : `Привіт, <em id="user-name">${esc(user.username || '')}</em>`}</h1>
+            <p class="muted home-sub">${guest ? 'Знайомся з LUMI — усі особисті функції відкриються після реєстрації' : 'Гарного дня для твоєї шкіри 🌸'}</p>
+          </div>
+          ${guest ? '' : streakCard()}
         </section>
 
         <div class="home-grid">
@@ -167,6 +220,8 @@ export function renderHome(root) {
     </div>
   `);
   bindAppShell(root);
+
+  if (!guest) loadStreak(root, user.id);
 
   // ім'я з бекенду (#100)
   if (!guest) getUserName(user).then((name) => {
