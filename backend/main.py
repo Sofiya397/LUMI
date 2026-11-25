@@ -12,6 +12,7 @@ from security import hash_password, verify_password
 from oauth_mock import router as oauth_router
 from quiz import router as quiz_router
 from roles import router as roles_router
+from consents import router as consents_router
 
 app = FastAPI(title="LUMI API", description="Backend для платформи догляду за шкірою LUMI")
 
@@ -27,6 +28,7 @@ init_db()
 app.include_router(oauth_router)
 app.include_router(quiz_router)
 app.include_router(roles_router)
+app.include_router(consents_router)
 
 # Тексти помилок для полів реєстрації
 REGISTER_FIELD_ERRORS = {
