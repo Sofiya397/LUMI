@@ -9,6 +9,7 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from database import get_connection, init_db
 from security import hash_password, verify_password
+from audit import log_event
 from oauth_mock import router as oauth_router
 from quiz import router as quiz_router
 from roles import router as roles_router
@@ -87,10 +88,12 @@ def register_user(user: UserCreate):
             VALUES (?, ?, ?)
         ''', (user.username, user.email.lower(), hash_password(user.password)))
         conn.commit()
+        log_event(cursor.lastrowid, "register", "account", "success", conn=conn)
 
         return {"message": "Користувача успішно створено!", "user_id": cursor.lastrowid}
 
     except sqlite3.IntegrityError:
+        log_event(None, "register", "account", "denied", reason="email вже існує", conn=conn)
         raise HTTPException(status_code=400, detail="Користувач з таким email вже існує")
 
     finally:
@@ -108,7 +111,11 @@ def login_user(data: UserLogin):
         row = cursor.fetchone()
 
         if row is None or not verify_password(data.password, row[2]):
+            log_event(row[0] if row else None, "login", "account", "denied",
+                      reason="неправильний логін або пароль", conn=conn)
             raise HTTPException(status_code=401, detail="Неправильний логін або пароль")
+
+        log_event(row[0], "login", "account", "success", conn=conn)
 
         return {
             "message": "Користувача знайдено",
