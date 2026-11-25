@@ -8,6 +8,7 @@ import './styles/quiz.css';
 import './styles/results.css';
 import './styles/home.css';
 import './styles/nav.css';
+import './styles/profile.css';
 
 import { startRouter } from './router.js';
 
