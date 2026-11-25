@@ -1,6 +1,7 @@
 // Навігація застосунку.
 // Телефон і планшет: нижня панель із 5 вкладками.
 // Ноутбук (від 1000px): бічне меню зліва з тими самими пунктами + «Мої дані» і картка користувача.
+// Гість (#120) бачить те саме меню, а замість картки — кнопки входу й реєстрації.
 import { getSession, clearSession } from '../api/auth.js';
 import { navigate } from '../router.js';
 
@@ -29,6 +30,26 @@ export const NAV_ITEMS = [
 ];
 const SIDE_EXTRA = [{ id: 'privacy', title: 'Мої дані' }];
 
+function sideUser(user) {
+  // гість (#120): замість картки користувача — вхід і реєстрація
+  if (!user?.id) {
+    return `
+      <div class="side-guest">
+        <p class="muted small">Ти переглядаєш LUMI як гість</p>
+        <a class="btn btn-primary btn-sm" href="#register">Зареєструватися</a>
+        <a class="btn btn-ghost btn-sm" href="#login">Увійти</a>
+      </div>`;
+  }
+  const name = user.username || (user.email ? user.email.split('@')[0] : '');
+  const initial = (name || '?').trim().charAt(0).toUpperCase();
+  return `
+      <div class="side-user">
+        <span class="avatar" aria-hidden="true">${esc(initial)}</span>
+        <b class="side-name">${esc(name)}</b>
+        <button class="icon-btn" type="button" data-logout title="Вийти" aria-label="Вийти">${icon('logout', 20)}</button>
+      </div>`;
+}
+
 function sideNav(active, user) {
   const links = [...NAV_ITEMS, ...SIDE_EXTRA]
     .map(
@@ -37,17 +58,11 @@ function sideNav(active, user) {
       }>${icon(n.id)}<span>${n.title}</span></a>`,
     )
     .join('');
-  const name = user?.username || (user?.email ? user.email.split('@')[0] : '');
-  const initial = (name || '?').trim().charAt(0).toUpperCase();
   return `
     <aside class="side-nav glass" aria-label="Меню">
       <a class="logo-link" href="#home"><img src="/logo.svg" width="34" height="34" alt="" /><b>LUMI</b></a>
       <nav class="side-links">${links}</nav>
-      <div class="side-user">
-        <span class="avatar" aria-hidden="true">${esc(initial)}</span>
-        <b class="side-name">${esc(name)}</b>
-        <button class="icon-btn" type="button" data-logout title="Вийти" aria-label="Вийти">${icon('logout', 20)}</button>
-      </div>
+      ${sideUser(user)}
     </aside>`;
 }
 
@@ -79,4 +94,20 @@ export function bindAppShell(root) {
       navigate('welcome');
     }),
   );
+}
+
+// Розділ, який потребує акаунта (#120): гість бачить пояснення й кнопки, меню лишається
+export function guestGate(title, text) {
+  return `
+    <main class="soon-page page-x">
+      <section class="glass soon-card">
+        <span class="widget-ic">${icon('profile', 24)}</span>
+        <h1 class="display">${title}</h1>
+        <p class="muted">${text}</p>
+        <div class="gate-actions">
+          <a class="btn btn-primary" href="#register">Зареєструватися</a>
+          <a class="btn btn-ghost" href="#login">Увійти</a>
+        </div>
+      </section>
+    </main>`;
 }

@@ -1,11 +1,11 @@
 // Головна сторінка (#83, адаптивність — #89). Меню — components/app-nav.js.
+// Гість (#120) теж бачить головну, а замість профілю — заклик зареєструватися.
 // 1. Звертання на ім'я, введене при реєстрації (бекенд #100, поки — з сесії).
 // 2. Поточна дата.
 // 3. Профіль шкіри з результатів тесту.
 // 4. Віджети, які ще не реалізовані, — порожні, але вже оформлені під майбутні дані.
 import { getSession } from '../api/auth.js';
 import { getUserName } from '../api/user.js';
-import { navigate } from '../router.js';
 import { loadLastAnswers, buildProfile } from '../data/skin-profile.js';
 import { appShell, bindAppShell } from '../components/app-nav.js';
 
@@ -88,16 +88,28 @@ function formatToday() {
 
 export function renderHome(root) {
   const user = getSession();
-  if (!user?.id) {
-    navigate('login'); // без входу на головну не пускаємо
-    return;
-  }
+  const guest = !user?.id; // #120: гість переглядає застосунок без реєстрації
 
-  const answers = loadLastAnswers(user.id);
+  const answers = guest ? null : loadLastAnswers(user.id);
   const profile = answers ? buildProfile(answers) : null;
-  const initial = (user.username || user.email || '?').trim().charAt(0).toUpperCase();
+  const initial = guest ? '' : (user.username || user.email || '?').trim().charAt(0).toUpperCase();
 
-  const profileCard = profile
+  const guestCard = `
+      <section class="glass widget widget-profile" aria-labelledby="w-profile">
+        <div class="widget-head">
+          <span class="widget-ic">${icon('sun')}</span>
+          <h2 id="w-profile">Профіль шкіри</h2>
+        </div>
+        <p class="muted">Зареєструйся й пройди тест з 10 питань — LUMI визначить тип шкіри й складе догляд саме для тебе.</p>
+        <div class="widget-links">
+          <a class="btn btn-primary" href="#register">Зареєструватися</a>
+          <a class="btn btn-ghost" href="#login">Увійти</a>
+        </div>
+      </section>`;
+
+  const profileCard = guest
+    ? guestCard
+    : profile
     ? `
       <section class="glass widget widget-profile" aria-labelledby="w-profile">
         <div class="widget-head">
@@ -130,17 +142,21 @@ export function renderHome(root) {
     <div class="home-page">
       <header class="home-bar page-x">
         <a class="logo-link" href="#home"><img src="/logo.svg" width="34" height="34" alt="" /><b>LUMI</b></a>
-        <div class="home-user">
+        ${
+          guest
+            ? `<div class="home-user"><a class="btn btn-ghost btn-sm" href="#login">Увійти</a></div>`
+            : `<div class="home-user">
           <span class="avatar" aria-hidden="true">${esc(initial)}</span>
           <button class="btn btn-ghost btn-sm" type="button" data-logout>${icon('logout', 18)}<span>Вийти</span></button>
-        </div>
+        </div>`
+        }
       </header>
 
       <main class="home-main page-x">
         <section class="home-hello">
           <p class="eyebrow" id="today">${formatToday()}</p>
-          <h1 class="display">Привіт, <em id="user-name">${esc(user.username || '')}</em></h1>
-          <p class="muted home-sub">Гарного дня для твоєї шкіри 🌸</p>
+          <h1 class="display">${guest ? 'Привіт!' : `Привіт, <em id="user-name">${esc(user.username || '')}</em>`}</h1>
+          <p class="muted home-sub">${guest ? 'Знайомся з LUMI — усі особисті функції відкриються після реєстрації' : 'Гарного дня для твоєї шкіри 🌸'}</p>
         </section>
 
         <div class="home-grid">
@@ -152,8 +168,8 @@ export function renderHome(root) {
   `);
   bindAppShell(root);
 
-  // ім'я з бекенду (#100), якщо ендпоінт уже є
-  getUserName(user).then((name) => {
+  // ім'я з бекенду (#100)
+  if (!guest) getUserName(user).then((name) => {
     const el = root.querySelector('#user-name');
     if (el && name) el.textContent = name;
   });

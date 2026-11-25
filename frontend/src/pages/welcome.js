@@ -32,6 +32,7 @@ export function renderWelcome(root) {
             <a class="btn btn-primary" href="#register" id="start-btn">Розпочати безкоштовно</a>
             <a class="btn btn-ghost" href="#login" id="login-btn">Увійти в акаунт</a>
           </div>
+          <a class="guest-link" href="#home">Переглянути без реєстрації →</a>
         </section>
 
         <div class="welcome-art" aria-hidden="true">
