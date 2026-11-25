@@ -7,6 +7,7 @@ import { renderHome } from './pages/home.js';
 import { renderQuiz } from './pages/quiz.js';
 import { renderResults } from './pages/results.js';
 import { renderSoon } from './pages/soon.js';
+import { renderProfile } from './pages/profile.js';
 
 const ROUTES = {
   welcome: (root) => renderWelcome(root),
@@ -15,12 +16,18 @@ const ROUTES = {
   home: (root) => renderHome(root),
   quiz: (root) => renderQuiz(root),
   results: (root) => renderResults(root),
+  profile: (root) => renderProfile(root),
   // розділи меню, які ще в роботі
   scan: (root) => renderSoon(root, 'scan'),
   feed: (root) => renderSoon(root, 'feed'),
   progress: (root) => renderSoon(root, 'progress'),
-  profile: (root) => renderSoon(root, 'profile'),
   privacy: (root) => renderSoon(root, 'privacy'),
+  // розділи, що відкриваються з профілю (#6)
+  settings: (root) => renderSoon(root, 'settings'),
+  routine: (root) => renderSoon(root, 'routine'),
+  reports: (root) => renderSoon(root, 'reports'),
+  support: (root) => renderSoon(root, 'support'),
+  rate: (root) => renderSoon(root, 'rate'),
 };
 
 // при відкритті застосунку — стартова сторінка (#1)
