@@ -8,6 +8,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from database import get_connection
+from audit import log_event
 
 CONSENT_TYPES = ("data_processing", "ai_profile_sharing")
 
@@ -61,7 +62,13 @@ def change_consent(user_id: int, data: ConsentChange):
     finally:
         conn.close()
 
-    # TODO (після 5.4): записати consent_granted / consent_revoked в audit_log
+        
+    log_event(
+        user_id,
+        "consent_granted" if data.granted else "consent_revoked",
+        "consents",
+        "success",
+    )
 
     message = "Згоду надано" if data.granted else "Згоду відкликано"
     return {"message": message, "type": data.type, **state}
