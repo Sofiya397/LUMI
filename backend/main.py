@@ -10,6 +10,7 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 from database import get_connection, init_db
 from security import hash_password, verify_password
 from audit import log_event
+from audit import router as audit_router
 from oauth_mock import router as oauth_router
 from quiz import router as quiz_router
 from roles import router as roles_router
@@ -30,6 +31,7 @@ app.include_router(oauth_router)
 app.include_router(quiz_router)
 app.include_router(roles_router)
 app.include_router(consents_router)
+app.include_router(audit_router)
 
 # Тексти помилок для полів реєстрації
 REGISTER_FIELD_ERRORS = {
