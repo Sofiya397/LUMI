@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lumi.local/schemas/skin_profile.schema.json",
+  "title": "Профіль шкіри для LUMI AI",
+  "description": "Знеособлений профіль шкіри, який передається в модуль LUMI AI (UC-07). Будується з відповідей опитування. Не містить email, імені, статі та id користувача (мінімізація даних).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "age_group",
+    "skin_type",
+    "sensitivity",
+    "concerns",
+    "breakouts",
+    "sun_exposure",
+    "sleep",
+    "routine",
+    "budget"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "description": "Версія схеми, щоб LUMI AI знав формат даних"
+    },
+    "age_group": {
+      "enum": ["under_18", "18_24", "25_34", "35_44", "45_plus"],
+      "description": "Питання 1: вік"
+    },
+    "skin_type": {
+      "enum": ["dry", "oily", "combination", "normal"],
+      "description": "Питання 3: тип шкіри"
+    },
+    "sensitivity": {
+      "enum": ["high", "medium", "low"],
+      "description": "Питання 4: реакція на нові засоби"
+    },
+    "concerns": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["acne", "pores", "pigmentation", "wrinkles", "dryness", "redness"]
+      },
+      "description": "Питання 5: що турбує (від 1 до 3 варіантів)"
+    },
+    "breakouts": {
+      "enum": ["daily", "monthly", "rare", "never"],
+      "description": "Питання 6: частота висипань"
+    },
+    "sun_exposure": {
+      "enum": ["lt_30m", "30m_1h", "1h_3h", "gt_3h"],
+      "description": "Питання 7: час на сонці щодня"
+    },
+    "sleep": {
+      "enum": ["good", "6_7h", "lt_6h", "restless"],
+      "description": "Питання 8: сон"
+    },
+    "routine": {
+      "enum": ["none", "basic", "extended", "full"],
+      "description": "Питання 9: поточний догляд"
+    },
+    "budget": {
+      "enum": ["lt_300", "300_700", "700_1500", "gt_1500"],
+      "description": "Питання 10: бюджет на один засіб, грн"
+    }
+  }
+}
