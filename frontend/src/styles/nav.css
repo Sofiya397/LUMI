@@ -168,6 +168,21 @@
     color: var(--plum);
     font-size: 14px;
   }
+  /* гість (#120): кнопки входу замість картки користувача */
+  .side-guest {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--glass-strong);
+    border: 1px solid var(--line);
+  }
+  .side-guest .btn {
+    width: 100%;
+    justify-content: center;
+  }
   .icon-btn {
     width: 36px;
     height: 36px;
@@ -221,4 +236,11 @@
 }
 .soon-card .soon {
   align-self: flex-start;
+}
+
+.gate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
 }

@@ -1,7 +1,7 @@
 // Розділи, які ще в роботі: місце в меню вже є, вміст з'явиться у своїх задачах.
+// Гість (#120) може відкривати загальні розділи; особисті показують «Потрібен акаунт».
 import { getSession } from '../api/auth.js';
-import { navigate } from '../router.js';
-import { appShell, bindAppShell } from '../components/app-nav.js';
+import { appShell, bindAppShell, guestGate } from '../components/app-nav.js';
 
 const PAGES = {
   scan: {
@@ -26,15 +26,22 @@ const PAGES = {
   },
 };
 
+// розділи з особистими даними — лише з акаунтом
+const PRIVATE = {
+  progress: 'Твоя статистика догляду зберігається в акаунті. Зареєструйся, щоб відмічати рутину й бачити прогрес.',
+  profile: 'Профіль з’явиться після реєстрації: твої дані, результати тесту й дописи.',
+  privacy: 'Тут ти керуватимеш згодами на обробку своїх даних і бачитимеш, хто їх отримував.',
+};
+
 const SPARK =
   '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>';
 
 export function renderSoon(root, id) {
-  if (!getSession()?.id) {
-    navigate('login');
+  const page = PAGES[id];
+  if (!getSession()?.id && PRIVATE[id]) {
+    root.innerHTML = appShell(id, guestGate(page.title, PRIVATE[id]));
     return;
   }
-  const page = PAGES[id];
   root.innerHTML = appShell(
     id,
     `<main class="soon-page page-x">

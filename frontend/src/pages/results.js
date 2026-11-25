@@ -3,7 +3,7 @@
 // 2. Секції «Аналіз від LUMI AI» і «Твій персональний догляд».
 //    Аналіз і засоби з бази даних залежать від AI agent chat #82 — для них підготовлене місце.
 import { getSession } from '../api/auth.js';
-import { navigate } from '../router.js';
+import { appShell, guestGate } from '../components/app-nav.js';
 import { loadLastAnswers, buildProfile } from '../data/skin-profile.js';
 
 const ICONS = {
@@ -39,7 +39,11 @@ function routineList(steps) {
 export function renderResults(root) {
   const user = getSession();
   if (!user?.id) {
-    navigate('login');
+    // гість (#120): результати є лише в акаунті
+    root.innerHTML = appShell(
+      'home',
+      guestGate('Результати тесту', 'Зареєструйся й пройди тест з 10 питань — тут з’явиться твій тип шкіри й персональний догляд.'),
+    );
     return;
   }
 
