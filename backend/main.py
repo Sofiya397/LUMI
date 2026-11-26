@@ -15,6 +15,7 @@ from oauth_mock import router as oauth_router
 from quiz import router as quiz_router
 from roles import router as roles_router
 from consents import router as consents_router
+from lumi_ai import router as lumi_ai_router
 
 app = FastAPI(title="LUMI API", description="Backend для платформи догляду за шкірою LUMI")
 
@@ -32,6 +33,7 @@ app.include_router(quiz_router)
 app.include_router(roles_router)
 app.include_router(consents_router)
 app.include_router(audit_router)
+app.include_router(lumi_ai_router)
 
 # Тексти помилок для полів реєстрації
 REGISTER_FIELD_ERRORS = {
